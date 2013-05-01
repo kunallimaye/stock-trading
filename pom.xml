@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.kunal.stocks</groupId>
+	<artifactId>stock-trading</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>Stock Trading Project</name>
+	<description>A parent project which contains the Stock Trading software
+</description>
+	<properties>
+		<java.source>1.6</java.source>
+		<java.target>1.6</java.target>
+	</properties>
+	<modules>
+		<module>stocks-data-model</module>
+	</modules>
+</project>
