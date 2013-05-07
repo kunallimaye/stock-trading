@@ -6,6 +6,7 @@
 package com.kunal.stock.dm.model;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
@@ -40,11 +41,17 @@ public class Index extends Security {
 	 * @param exchange
 	 * @param maxValueIn52Weeks
 	 * @param lowestValueIn52Weeks
+	 * @param currentBuyValue
+	 * @param currentSellValue
+	 * @param quotes
 	 */
 	public Index(String symbol, String name, Exchange exchange,
-			Double maxValueIn52Weeks, Double lowestValueIn52Weeks,
+			Double maxValueIn52Weeks, Double lowestValueIn52Weeks, 
+			Double currentBuyValue, Double currentSellValue,
+			Set<Quote> quotes, 
 			Date updatedOn) {
-		super(symbol, name, exchange, maxValueIn52Weeks, lowestValueIn52Weeks);
+		super(symbol, name, exchange, maxValueIn52Weeks, lowestValueIn52Weeks, 
+				currentBuyValue, currentSellValue, quotes);
 		this.updatedOn = updatedOn;
 		
 		return ;

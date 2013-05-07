@@ -11,12 +11,16 @@
 package com.kunal.stock.dm.model;
 
 import java.io.Serializable;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -74,6 +78,22 @@ public class Security implements Serializable {
 	private Double lowestValueIn52Weeks;
 
 	/**
+	 * Current buy value for the security.
+	 */
+	private Double currentBuyValue;
+	
+	/**
+	 * Current sell value for the security.
+	 */
+	private Double currentSellValue;
+
+	/**
+	 * List of all the quotes for the security.
+	 */
+	@OneToMany(mappedBy = "security", cascade = CascadeType.PERSIST, fetch=FetchType.EAGER)
+	private Set<Quote> quotes;
+	
+	/**
 	 * 
 	 */
 	public Security() {
@@ -86,14 +106,49 @@ public class Security implements Serializable {
 	 * @param exchange
 	 * @param maxValueIn52Weeks
 	 * @param lowestValueIn52Weeks
+	 * @param currentBuyValue
+	 * @param currentSellValue
+	 * @param quotes
 	 */
 	public Security(String symbol, String name, Exchange exchange,
-			Double maxValueIn52Weeks, Double lowestValueIn52Weeks) {
+			Double maxValueIn52Weeks, Double lowestValueIn52Weeks,
+			Double currentBuyValue, Double currentSellValue,
+			Set<Quote> quotes) {
 		this.symbol = symbol;
 		this.name = name;
 		this.exchange = exchange;
 		this.maxValueIn52Weeks = maxValueIn52Weeks;
 		this.lowestValueIn52Weeks = lowestValueIn52Weeks;
+		this.currentBuyValue = currentBuyValue;
+		this.currentSellValue = currentSellValue;
+	}
+
+	/**
+	 * @return the currentBuyValue
+	 */
+	public Double getCurrentBuyValue() {
+		return currentBuyValue;
+	}
+
+	/**
+	 * @param currentBuyValue the currentBuyValue to set
+	 */
+	public void setCurrentBuyValue(Double currentValue) {
+		this.currentBuyValue = currentValue;
+	}
+
+	/**
+	 * @return the currentSellValue
+	 */
+	public Double getCurrentSellValue() {
+		return currentSellValue;
+	}
+
+	/**
+	 * @param currentSellValue the currentSellValue to set
+	 */
+	public void setCurrentSellValue(Double currentSellValue) {
+		this.currentSellValue = currentSellValue;
 	}
 
 	/**

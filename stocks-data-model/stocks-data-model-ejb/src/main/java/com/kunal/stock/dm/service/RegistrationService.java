@@ -60,7 +60,7 @@ public class RegistrationService {
     }
     
     public void register(Index index) throws Exception {
-        log.info("Registering security: " + index.getName());
+        log.info("Registering index: " + index.getName());
         em.persist(index);
         indexEventSrc.fire(index);
     }

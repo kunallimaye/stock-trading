@@ -147,8 +147,9 @@ public class CompanyRegistrationTest {
     public void testCompanySearchBySymbol() throws Exception{
         int counter = 3;
         Company newCompany = createCompany(counter);
-    	log.info("Searching for company with symbol: " + newCompany.getSymbol());
-        Company searchCompany = searchService.findCompanyBySymbol(newCompany.getSymbol());
+    	log.info("Searching for company with symbol: " + newCompany.getSymbol() + " and Exchange: " + newCompany.getExchange().getSymbol());
+        Company searchCompany = searchService.findCompanyBySymbol(newCompany.getSymbol(), newCompany.getExchange().getSymbol());
+        
         assertEquals(searchCompany.getId(), newCompany.getId());
     }
 

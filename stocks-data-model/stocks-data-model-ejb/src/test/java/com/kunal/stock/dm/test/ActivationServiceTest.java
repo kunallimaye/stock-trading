@@ -16,13 +16,9 @@
  */
 package com.kunal.stock.dm.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -35,7 +31,6 @@ import com.kunal.stock.dm.model.Company;
 import com.kunal.stock.dm.model.Exchange;
 import com.kunal.stock.dm.model.Index;
 import com.kunal.stock.dm.service.ActivationService;
-import com.kunal.stock.dm.service.RegistrationService;
 
 import org.jboss.shrinkwrap.api.Archive;
 import org.junit.Test;

@@ -9,6 +9,7 @@
 package com.kunal.stock.dm.data;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -21,6 +22,7 @@ import javax.persistence.criteria.Root;
 import com.kunal.stock.dm.model.Company;
 import com.kunal.stock.dm.model.Company_;
 import com.kunal.stock.dm.model.Exchange;
+import com.kunal.stock.dm.model.ExchangeEnum;
 import com.kunal.stock.dm.model.Exchange_;
 import com.kunal.stock.dm.model.Index;
 import com.kunal.stock.dm.model.Index_;
@@ -32,6 +34,9 @@ public class DataSearchService {
 
 	@Inject
 	private EntityManager em;
+	
+	@Inject
+	Logger log;
 
 	/**
 	 * Allows searching through all the exchanges by the exchange ID
@@ -43,6 +48,21 @@ public class DataSearchService {
 		return em.find(Exchange.class, exchangeId);
 	}
 
+	/**
+	 * A helper query to return NULL if no result is returned.
+	 * 
+	 * @param typedQuery
+	 * @return
+	 */
+	private <E>E getSingleResult(TypedQuery<E> typedQuery){
+		if (typedQuery != null && typedQuery.getResultList() != null
+				&& typedQuery.getResultList().size() > 0) {
+			return typedQuery.getSingleResult();
+		} else {
+			return null;
+		}
+	}
+	
 	/**
 	 * Allows searching through all the exchanges given the exchange symbol
 	 * 
@@ -56,12 +76,14 @@ public class DataSearchService {
 		criteria.select(exchange);
 		criteria.where(cb.equal(exchange.get(Exchange_.symbol), exchangeSymbol));
 		TypedQuery<Exchange> exchangeQuery = em.createQuery(criteria);
-		if (exchangeQuery != null && exchangeQuery.getResultList() != null
-				&& exchangeQuery.getResultList().size() > 0) {
-			return exchangeQuery.getSingleResult();
-		} else {
-			return null;
-		}
+//		if (exchangeQuery != null && exchangeQuery.getResultList() != null
+//				&& exchangeQuery.getResultList().size() > 0) {
+//			return exchangeQuery.getSingleResult();
+//		} else {
+//			return null;
+//		}
+		
+		return this.getSingleResult(exchangeQuery);
 	}
 
 	/**
@@ -100,12 +122,8 @@ public class DataSearchService {
 		criteria.select(index);
 		criteria.where(cb.equal(index.get(Index_.symbol), indexSymbol));
 		TypedQuery<Index> indexQuery = em.createQuery(criteria);
-		if (indexQuery != null && indexQuery.getResultList() != null
-				&& indexQuery.getResultList().size() > 0) {
-			return indexQuery.getSingleResult();
-		} else {
-			return null;
-		}
+
+		return this.getSingleResult(indexQuery);
 	}
 
 	/**
@@ -132,18 +150,32 @@ public class DataSearchService {
 	}
 
 	/**
-	 * Allows searching through all the companies given the company symbol
-	 * 
+	 * Allows searching through all the companies given the company symbol.
+	 * Only one exchange can be supplied.
 	 * @param companySymbol
 	 * @return
 	 */
-	public Company findCompanyBySymbol(String companySymbol) {
+	public Company findCompanyBySymbol(String companySymbol, String... exchangeSymbols) {
+		assert exchangeSymbols.length <= 1;
+		String exchangeSymbol = exchangeSymbols.length>0 ? exchangeSymbols[0] : new String(ExchangeEnum.ASX.getSymbol());
+		Exchange exchange = this.findExchangeBySymbol(exchangeSymbol);
+		if(exchange == null){
+			log.info("Exchange with symbol[" + exchangeSymbol + "] not found in the DB");
+		}
+		log.info("Searching for company[symbol: "+ companySymbol +"] with exchange[symbol: " + exchange.getSymbol() + "]");
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Company> criteria = cb.createQuery(Company.class);
 		Root<Company> company = criteria.from(Company.class);
 		criteria.select(company);
-		criteria.where(cb.equal(company.get(Company_.symbol), companySymbol));
-		return em.createQuery(criteria).getSingleResult();
+		criteria.where(
+					cb.and(
+							cb.equal(company.get(Company_.symbol), companySymbol),
+							cb.equal(company.get(Company_.exchange), exchange)
+					)
+				);
+
+		return this.getSingleResult(em.createQuery(criteria));
+		
 	}
 
 	/**
@@ -181,7 +213,8 @@ public class DataSearchService {
 		Root<Security> security = criteria.from(Security.class);
 		criteria.select(security);
 		criteria.where(cb.equal(security.get(Security_.symbol), securitySymbol));
-		return em.createQuery(criteria).getSingleResult();
+//		return em.createQuery(criteria).getSingleResult();
+		return this.getSingleResult(em.createQuery(criteria));
 	}
 
 	/**

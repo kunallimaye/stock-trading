@@ -11,7 +11,10 @@ import java.util.EnumSet;
  */
 public enum CompanyEnum {
 
-	ANZ("ANZ", "ANZ Bank", EnumSet.of(IndexEnum.XFJ));
+	ANZ("ANZ", "Australia And New Zealand Banking Group Limited", EnumSet.of(IndexEnum.XFJ, IndexEnum.XXJ)),
+	BEN("BEN", "Bendigo and Adelaide Bank Limited", EnumSet.of(IndexEnum.XFJ, IndexEnum.XXJ)),
+	BHP("BHP", "BHP Billion Limited", EnumSet.of(IndexEnum.XMJ, IndexEnum.XJR)),
+	COH("COH", "Cochlear Limited", EnumSet.of(IndexEnum.XHJ));
 	
 	String companySymbol;
 	String companyName;

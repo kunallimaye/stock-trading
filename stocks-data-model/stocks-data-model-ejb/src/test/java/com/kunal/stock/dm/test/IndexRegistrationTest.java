@@ -116,7 +116,7 @@ public class IndexRegistrationTest {
     @Test
     public void testfindAllIndicesOrderedByName() throws Exception{
         int counter = 4;
-        activationService.populateDB();
+
         createIndex(counter);
     	log.info("Searching for all the indices ordered by name");
         List<Index> indices = searchService.findAllIndicesOrderedByName();

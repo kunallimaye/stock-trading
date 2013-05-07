@@ -87,7 +87,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
+ 		<dependency>
 			<groupId>org.jboss.arquillian.protocol</groupId>
 			<artifactId>arquillian-protocol-servlet</artifactId>
 			<scope>test</scope>
@@ -103,15 +103,17 @@
 		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<!-- Start - JPA specific configuration -->
-			<!-- Following configuration is required to compile automatically generated Connonical Metamodel for JPA -->
+			<!-- Following configuration is required to compile automatically generated 
+				Connonical Metamodel for JPA -->
 			<!-- Further information is located at: http://docs.jboss.org/hibernate/stable/jpamodelgen/reference/en-US/html_single/ -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
- 					<compilerArgument>-proc:none</compilerArgument>
-			</configuration>
+					<compilerArgument>-proc:none</compilerArgument>
+				<debug>true</debug>
+				</configuration>
 			</plugin>
- 			<plugin>
+			<plugin>
 				<groupId>org.bsc.maven</groupId>
 				<artifactId>maven-processor-plugin</artifactId>
 				<version>2.0.5</version>
@@ -157,6 +159,7 @@
 				tests that execute in the specified container -->
 			<id>default</id>
 			<activation>
+				<!-- <activeByDefault>true</activeByDefault> -->
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<build>
@@ -180,11 +183,20 @@
 			<!-- Run with: mvn clean test -Parq-jbossas-managed -->
 			<id>arq-jbossas-managed</id>
 			<dependencies>
+<!-- 				<dependency>
+					<groupId>org.jboss.spec</groupId>
+					<artifactId>jboss-javaee-6.0</artifactId>
+					<version>1.0.0.Final</version>
+					<type>pom</type>
+					<scope>provided</scope>
+				</dependency>
+ -->
 				<dependency>
 					<groupId>org.jboss.as</groupId>
 					<artifactId>jboss-as-arquillian-container-managed</artifactId>
 					<scope>test</scope>
 				</dependency>
+
 			</dependencies>
 		</profile>
 

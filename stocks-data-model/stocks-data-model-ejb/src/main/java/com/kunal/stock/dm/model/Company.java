@@ -64,14 +64,19 @@ public class Company extends Security {
 	 * @param exchange
 	 * @param maxValueIn52Weeks
 	 * @param lowestValueIn52Weeks
+	 * @param currentBuyValue
+	 * @param currentSellValue
 	 * @param sectors
+	 * @param quotes
 	 * @param updatedOn
 	 */
 	public Company(String symbol, String name, Exchange exchange,
-			Double maxValueIn52Weeks, Double lowestValueIn52Weeks,
+			Double maxValueIn52Weeks, Double lowestValueIn52Weeks, 
+			Double currentBuyValue, Double currentSellValue, Set<Quote> quotes,  
 			Set<Index> sectors,
 			Date updatedOn) {
-		super(symbol, name, exchange, maxValueIn52Weeks, lowestValueIn52Weeks);
+		super(symbol, name, exchange, maxValueIn52Weeks, lowestValueIn52Weeks, 
+				currentBuyValue, currentSellValue, quotes);
 		this.sectors = sectors;
 		this.updatedOn = updatedOn;
 		
