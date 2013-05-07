@@ -48,6 +48,8 @@
 		<dependency>
 			<groupId>org.jboss.spec.javax.ws.rs</groupId>
 			<artifactId>jboss-jaxrs-api_1.1_spec</artifactId>
+			<version>1.0.1.Final</version>
+			<type>pom</type>
 			<scope>provided</scope>
 		</dependency>
 
@@ -89,8 +91,70 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- Test scope dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-	</dependencies>
+		<!-- Optional, but highly recommended -->
+		<!-- Arquillian allows you to test enterprise code such as EJBs and Transactional(JTA) 
+			JPA from JUnit/TestNG -->
+		<dependency>
+			<groupId>org.jboss.arquillian.junit</groupId>
+			<artifactId>arquillian-junit-container</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+ 		<dependency>
+			<groupId>org.jboss.arquillian.protocol</groupId>
+			<artifactId>arquillian-protocol-servlet</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+        	<groupId>org.jboss.resteasy</groupId>
+        	<artifactId>resteasy-jaxrs</artifactId>
+        	 <version>2.2.1.GA</version>
+        	<scope>provided</scope>
+     	</dependency>
+
+		<dependency>
+		   <groupId>org.jboss.resteasy</groupId>
+		   <artifactId>resteasy-multipart-provider</artifactId>
+        	 <version>2.2.1.GA</version>
+		   <exclusions>
+		      <exclusion>
+		         <artifactId>resteasy-jaxrs</artifactId>
+		         <groupId>org.jboss.resteasy</groupId>
+		      </exclusion>
+		   </exclusions>
+		</dependency>
+		
+<!-- 		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<version>2.2.1.GA</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxb-provider</artifactId>
+			<version>2.2.0.GA</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.stream</groupId>
+					<artifactId>sjsxp</artifactId>
+				</exclusion>
+			</exclusions>		
+		</dependency>
+ -->	</dependencies>
 
 	<build>
 		<finalName>${project.artifactId}</finalName>

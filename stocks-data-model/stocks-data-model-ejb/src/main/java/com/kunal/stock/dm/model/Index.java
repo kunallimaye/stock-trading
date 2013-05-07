@@ -13,9 +13,10 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
-// @XmlRootElement
+@XmlRootElement
 @Table(name = "Index")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Index extends Security {

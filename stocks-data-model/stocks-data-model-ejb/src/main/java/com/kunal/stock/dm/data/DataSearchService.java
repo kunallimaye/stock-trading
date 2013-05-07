@@ -188,6 +188,7 @@ public class DataSearchService {
 		CriteriaQuery<Company> criteria = cb.createQuery(Company.class);
 		Root<Company> company = criteria.from(Company.class);
 		criteria.select(company).orderBy(cb.asc(company.get(Company_.name)));
+		
 		return em.createQuery(criteria).getResultList();
 	}
 
@@ -227,6 +228,7 @@ public class DataSearchService {
 		CriteriaQuery<Security> criteria = cb.createQuery(Security.class);
 		Root<Security> security = criteria.from(Security.class);
 		criteria.select(security).orderBy(cb.asc(security.get(Security_.name)));
+		
 		return em.createQuery(criteria).getResultList();
 	}
 }
