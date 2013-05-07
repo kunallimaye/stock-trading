@@ -7,8 +7,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.ejb.PostActivate;
@@ -17,6 +20,7 @@ import javax.inject.Inject;
 
 import com.kunal.stock.dm.data.DataSearchService;
 import com.kunal.stock.dm.model.Company;
+import com.kunal.stock.dm.model.CompanyEnum;
 import com.kunal.stock.dm.model.Exchange;
 import com.kunal.stock.dm.model.Index;
 import com.kunal.stock.dm.model.IndexEnum;
@@ -52,6 +56,7 @@ public class ActivationService {
 					+ exchange.getSymbol());
 		}
 
+		exchange = searchService.findExchangeBySymbol("ASX");
 		return exchange;
 	}
 
@@ -62,17 +67,18 @@ public class ActivationService {
 			log.info("Index already exists. Not registering index with symbol: "
 					+ index.getSymbol());
 		}
+		index = searchService.findIndexBySymbol(index.getSymbol());
 		return index;
 	}
 
 	private Map<String, Index> setupIndices(Exchange asxExchange) throws Exception {
-
+		log.info("Trying to setup indices");
 		Map<String, Index> indices = new HashMap<String, Index>();
 		
 		for (IndexEnum indexEnum : IndexEnum.values()){
 			Index index = new Index(indexEnum.getIndexSymbol(), indexEnum.getIndexName(),
-					asxExchange, null, null, new Date());
-			indices.put(IndexEnum.XGD.getIndexSymbol(), this.setupIndex(index));
+					asxExchange, null, null, null, null, null, new Date());
+			indices.put(indexEnum.getIndexSymbol(), this.setupIndex(index));
 		}
 
 		return indices;
@@ -85,29 +91,40 @@ public class ActivationService {
 			log.info("Company already exists. Not registering company with symbol: "
 					+ company.getSymbol());
 		}
-
+		company = searchService.findCompanyBySymbol(company.getSymbol());
 		return company;
 	}
 
-	private List<Company> setupCompanies(Exchange exchange) {
+	private List<Company> setupCompanies(Exchange asxExchange, Map<String, Index> indices) throws Exception {
 		List<Company> companies = new ArrayList<Company>();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		// TODO: populate companies from the universe
-		// Company anz = new Company(
-		// symbol, name,
-		// exchange,
-		// maxValueIn52Weeks,
-		// lowestValueIn52Weeks,
-		// dateFormat.parse("30/04/2013"));
-		// this.setupCompany(anz);
+		log.info("Trying to setup companies");
+		for(CompanyEnum companyEnum : CompanyEnum.values()){
+			Set<Index> sectors = new HashSet<Index>();
+			Iterator<IndexEnum> iterator = companyEnum.getSectors().iterator();
+			while( companyEnum.getSectors()!=null && iterator.hasNext() ){
+				IndexEnum sector = iterator.next();
+				Index index = indices.get(sector.getIndexSymbol());
+				sectors.add(index);
+			}
+			
+			Company company = new Company(companyEnum.getCompanySymbol(),
+					companyEnum.getCompanyName(), asxExchange,
+					null, null,
+					null, null,
+					null, 
+					sectors, 
+					dateFormat.parse("1/05/2013"));
+			companies.add(this.setupCompany(company));
+		}
+
 		return companies;
 	}
 
 	@PostActivate
 	public void populateDB() throws Exception {
 		Exchange asxExchange = this.setupExchange();
-		this.setupIndices(asxExchange);
-		// this.setupCompanies(exchange);
+		this.setupCompanies(asxExchange, this.setupIndices(asxExchange));
 
 		return;
 	}
